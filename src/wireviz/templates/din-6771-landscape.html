@@ -48,9 +48,15 @@
       flex: 1 1 auto;
       min-height: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+    }
+
+    /* Description duplicates the DIN title block — hide it in the diagram area. */
+    #description {
+      display: none;
     }
 
     #diagram svg, #diagram img {
