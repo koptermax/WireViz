@@ -32,6 +32,7 @@ setup(
     entry_points={
         "console_scripts": [
             "wireviz=wireviz.wv_cli:wireviz",
+            "wireviz-twist=wireviz.wv_twist:main",
         ],
     },
     classifiers=[
