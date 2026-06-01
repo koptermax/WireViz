@@ -250,6 +250,46 @@ def _post_process_edges(svg_path: Path, cable_infos: dict) -> None:
 #  PNG regeneration from modified SVG                                          #
 # --------------------------------------------------------------------------- #
 
+def _html_to_pdf(html_path: Path) -> None:
+    """Convert a WireViz HTML output to PDF (A4 landscape) via Chrome headless."""
+    pdf_path = html_path.with_suffix('.pdf')
+    # Inject A4 landscape page size and fix the DIN frame dimensions.
+    # sheetsize_default / .A4 is 180x277mm (portrait inner area per ISO 5457).
+    # Landscape A4 inner area with the template margins (10mm all sides,
+    # 20mm left) is (297-10-20) x (210-10-10) = 267 x 190mm.
+    html = html_path.read_text(encoding='utf-8')
+    page_css = (
+        '<style>'
+        '@page{size:A4 landscape;margin:0}'
+        '#page{margin:10mm;margin-left:20mm}'
+        '#frame{width:267mm!important;height:190mm!important}'
+        '</style>'
+    )
+    patched = html.replace('</head>', page_css + '\n</head>', 1)
+    tmp = html_path.with_name(html_path.stem + '.__pdf_tmp.html')
+    tmp.write_text(patched, encoding='utf-8')
+    try:
+        url = f'file://{tmp.resolve()}'
+        for browser in ('google-chrome', 'chromium', 'chromium-browser'):
+            cmd = [
+                browser,
+                '--headless=new', '--no-sandbox', '--disable-gpu',
+                '--no-pdf-header-footer',
+                f'--print-to-pdf={pdf_path}',
+                url,
+            ]
+            try:
+                r = subprocess.run(cmd, capture_output=True, timeout=30)
+                if r.returncode == 0:
+                    return
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                continue
+    finally:
+        tmp.unlink(missing_ok=True)
+    print('  Note: could not generate PDF (google-chrome/chromium not found).',
+          file=sys.stderr)
+
+
 def _svg_to_png(svg_path: Path) -> None:
     png_path = svg_path.with_suffix('.png')
     for cmd in (
@@ -318,17 +358,18 @@ def main():
                 'hex_colors': [_to_hex(c) for c in colors],
             }
 
-        if not cable_infos:
-            continue
+        if cable_infos:
+            svg_path = yml_path.with_suffix('.svg')
+            if svg_path.exists():
+                print(f'Applying twist visualisation \u2192 {svg_path.name}')
+                _post_process_edges(svg_path, cable_infos)
+                _svg_to_png(svg_path)
+            else:
+                print(f'  SVG not found: {svg_path}', file=sys.stderr)
 
-        svg_path = yml_path.with_suffix('.svg')
-        if not svg_path.exists():
-            print(f'  SVG not found: {svg_path}', file=sys.stderr)
-            continue
-
-        print(f'Applying twist visualisation → {svg_path.name}')
-        _post_process_edges(svg_path, cable_infos)
-        _svg_to_png(svg_path)
+        html_path = yml_path.with_suffix('.html')
+        if html_path.exists():
+            _html_to_pdf(html_path)
 
 
 if __name__ == '__main__':
