@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="generator" content="<!-- %generator% -->">
+  <title><!-- %title% --></title>
+  <style>
+    body {
+      font-family: <!-- %fontname% -->;
+      background-color: <!-- %bgcolor% -->;
+    }
+
+    table, td, th, #frame {
+      border: 0.35mm solid black; /* line weight based on DIN 15 */
+    }
+
+    table {
+      padding: 0;
+      border-bottom: 0;
+      border-right: 0;
+      border-spacing: 0mm;
+    }
+
+    td, th {
+      border-top: 0;
+      border-left: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 2.8mm;
+    }
+
+    /*
+     * Landscape A4 inner drawing area (EN ISO 5457):
+     *   (297 - 10 - 20) x (210 - 10 - 10) = 267 x 190 mm
+     * where margins are: right/top/bottom = 10 mm, left = 20 mm (binding edge).
+     */
+    #frame {
+      width: 267mm;
+      height: 190mm;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Diagram area grows to fill all space above the BOM and title block. */
+    #diagram {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #diagram svg, #diagram img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /*
+     * BOM sits directly above the title block, right-aligned to match it.
+     * align-self: flex-end aligns to the right edge in a column flex container.
+     */
+    #bom {
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    #bom table {
+      width: 180mm;
+    }
+
+    #titleblock tr, #bom tr {
+      height: 4.25mm;
+    }
+
+    /* Title block sits at the bottom-right, same width as the DIN 6771 block. */
+    #titleblock {
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    #titleblock table {
+      width: 180mm;
+      height: 38.25mm;
+    }
+
+    #bom th, td {
+      text-align: left;
+    }
+
+    #bom .bom_col_id {
+      text-align: center;
+    }
+
+    #bom .bom_col_qty {
+      text-align: right;
+    }
+
+    .name {
+      width: 16mm;
+    }
+
+    .date {
+      width: 10mm;
+    }
+
+    .revno {
+      text-align: center;
+      width: 6mm;
+    }
+
+    .changelog {
+      width: 22mm;
+    }
+
+    .process {
+      width: 18mm;
+    }
+
+    .title {
+      width: 82mm;
+      font-size: 5.6mm;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .company {
+      font-size: 4mm;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .partno {
+      font-size: 4mm;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .sheetno {
+      width: 12.75mm;
+      text-align: center;
+    }
+
+  </style>
+  <style type="text/css" media="print">
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    #page {
+      margin: 10mm;
+      margin-left: 20mm;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="page">
+    <div id="frame">
+
+      <div id="diagram">
+
+        <div id="description">
+          <!-- %description% -->
+        </div>
+
+        <!-- %diagram% -->
+
+        <div id="notes">
+          <!-- %notes% -->
+        </div>
+
+      </div>
+
+      <div id="bom">
+        <!-- %bom_reversed% -->
+      </div>
+
+      <div id="titleblock">
+        <table>
+          <tr>
+            <td class="revno"><!-- %revisions_8% --></td>
+            <td class="changelog"><!-- %revisions_8_changelog% --></td>
+            <td class="date"><!-- %revisions_8_date% --></td>
+            <td class="name"><!-- %revisions_8_name% --></td>
+            <td class="process"></td>
+            <td class="date">Date</td>
+            <td class="name">Name</td>
+            <td class="title" colspan="3" rowspan="5"><!-- %title% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_7% --></td>
+            <td><!-- %revisions_7_changelog% --></td>
+            <td><!-- %revisions_7_date% --></td>
+            <td><!-- %revisions_7_name% --></td>
+            <td><!-- %authors_1% --></td>
+            <td><!-- %authors_1_date% --></td>
+            <td><!-- %authors_1_name% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_6% --></td>
+            <td><!-- %revisions_6_changelog% --></td>
+            <td><!-- %revisions_6_date% --></td>
+            <td><!-- %revisions_6_name% --></td>
+            <td><!-- %authors_2% --></td>
+            <td><!-- %authors_2_date% --></td>
+            <td><!-- %authors_2_name% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_5% --></td>
+            <td><!-- %revisions_5_changelog% --></td>
+            <td><!-- %revisions_5_date% --></td>
+            <td><!-- %revisions_5_name% --></td>
+            <td><!-- %authors_3% --></td>
+            <td><!-- %authors_3_date% --></td>
+            <td><!-- %authors_3_name% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_4% --></td>
+            <td><!-- %revisions_4_changelog% --></td>
+            <td><!-- %revisions_4_date% --></td>
+            <td><!-- %revisions_4_name% --></td>
+            <td colspan="2"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_3% --></td>
+            <td><!-- %revisions_3_changelog% --></td>
+            <td><!-- %revisions_3_date% --></td>
+            <td><!-- %revisions_3_name% --></td>
+            <td class="company" colspan="3" rowspan="3"><!-- %company% --></td>
+            <td class="partno" colspan="2" rowspan="3"><!-- %pn% --></td>
+            <td class="sheetno" rowspan="2">Sheet<br /><!-- %sheet_current% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_2% --></td>
+            <td><!-- %revisions_2_changelog% --></td>
+            <td><!-- %revisions_2_date% --></td>
+            <td><!-- %revisions_2_name% --></td>
+          </tr>
+          <tr>
+            <td class="revno"><!-- %revisions_1% --></td>
+            <td><!-- %revisions_1_changelog% --></td>
+            <td><!-- %revisions_1_date% --></td>
+            <td><!-- %revisions_1_name% --></td>
+            <td class="sheetno">of <!-- %sheet_total% --></td>
+          </tr>
+          <tr>
+            <td>Rev</td>
+            <td>Changelog</td>
+            <td>Date</td>
+            <td>Name</td>
+            <td colspan="3"></td>
+            <td></td>
+            <td colspan="2"></td>
+          </tr>
+        </table>
+      </div> <!-- /titleblock -->
+
+    </div> <!-- /frame -->
+  </div> <!-- /page -->
+</body>
+</html>
